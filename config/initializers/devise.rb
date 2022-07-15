@@ -14,11 +14,22 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'affaebe901b0a152d014934e54f26f644716a30702abfed4675ffe90a29cdadf12cc52a52783fc497bdef5e654412b92c3b00ca4410a7c7af230a6ea9a4a418c'
+  # config.secret_key = '2187b291cb82c1640d5d7b7ad86336315d79739b75353540c559e6c9b81e7530571b91899db092fad15290b3a43f1e28ff7695a3076d938c180076e612ebde1c'
+  config.jwt do |jwt|
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
+    jwt.dispatch_requests = [
+      ['POST', %r{^/login$}],
+      ['POST', %r{^/signup$}]
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/logout$}]
+    ]
+    jwt.expiration_time = 1.day.to_i
+  end
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
-  # config.parent_controller = 'DeviseController'
+  # config.parent_controller = 'ActionController::API'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -79,10 +90,10 @@ Devise.setup do |config|
   # enable this with :database unless you are using a custom strategy.
   # The supported strategies are:
   # :database      = Support basic authentication with authentication key + password
-  # config.http_authenticatable = false
+  config.http_authenticatable = [:token]
 
   # If 401 status code should be returned for AJAX requests. True by default.
-  # config.http_authenticatable_on_xhr = true
+  config.http_authenticatable_on_xhr = false
 
   # The realm used in Http Basic Authentication. 'Application' by default.
   # config.http_authentication_realm = 'Application'
@@ -126,7 +137,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '147c34b45f8990e08889753499dff26adb2384fc6de3c2eab6c46925d335726b11214bbb2c92d634421475144279241bd62dca512aeaffda0c26e01ea56d244d'
+  # config.pepper = '4dba522803d6030aefcb1079c851273898e1e87d2891e9cf26f169e045455ad15c81324d153c28a82df0778f929b39b3adfa492c86b56af88208942c7fde17f3'
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -263,7 +274,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  # config.navigational_formats = ['*/*', :html]
+  config.navigational_formats = []
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
@@ -308,4 +319,7 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+  config.warden do |manager|
+    manager.failure_app = TrelloCloneApiFailure
+  end
 end

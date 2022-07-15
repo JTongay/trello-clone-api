@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  resources :users
-	resources :boards do
- 		resources :lists
- 	end
+  devise_for :users,
+             path: '',
+             path_names: {
+               sign_in: 'login',
+               sign_out: 'logout',
+               registration: 'signup'
+             },
+             controllers: {
+               sessions: 'users/sessions',
+               registrations: 'users/registrations'
+             }
+
+  resources :users do
+    resources :boards do
+      resources :lists
+    end
+  end
 end

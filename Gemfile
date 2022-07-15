@@ -16,7 +16,11 @@ gem 'puma', '~> 5.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
+gem 'devise-jwt', '0.9.0'
+gem 'dotenv-rails'
+gem 'rack-cors'
 
+# gem 'dry-configurable', '0.9.0'
 gem 'jsonapi-serializer'
 
 gem 'kaminari'
@@ -35,6 +39,7 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'ffaker'
+  gem 'rspec-core'
   gem 'rspec-rails', '~> 5.0.1'
 end
 

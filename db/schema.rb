@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_06_160746) do
+ActiveRecord::Schema.define(version: 2022_01_09_205116) do
 
   create_table "boards", force: :cascade do |t|
     t.string "name", null: false
@@ -18,6 +18,12 @@ ActiveRecord::Schema.define(version: 2021_12_06_160746) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_boards_on_user_id"
+  end
+
+  create_table "jwt_denylist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "expired_at", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
   create_table "lists", force: :cascade do |t|
@@ -28,9 +34,15 @@ ActiveRecord::Schema.define(version: 2021_12_06_160746) do
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
-    t.string "password", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "boards", "users"
