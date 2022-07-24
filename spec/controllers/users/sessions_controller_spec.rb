@@ -1,7 +1,13 @@
-# frozen_string_literal: true
+# # frozen_string_literal: true
 
-require 'rails_helper'
+# require 'rails_helper'
 
-describe User::SessionsController, type: :request do
-  let(:user) { create :user }
-end
+# describe Users::SessionsController, type: :request do
+#   let(:user) { create :user }
+
+#   it 'logs in a user' do
+#     create :sessions, params: { username: user.username, password: user.password }
+
+#     expect(true).to be(true)
+#   end
+# end
